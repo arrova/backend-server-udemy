@@ -16,6 +16,11 @@ app.use(bodyParser.json());
 let appRoutes = require('./routes/app');
 let usuarioRoutes = require('./routes/usuario');
 let loginRoutes = require('./routes/login');
+let hospitalRoutes = require('./routes/hospital');
+let medicoRoutes = require('./routes/medico');
+let busquedaRoutes = require('./routes/busqueda');
+let uploadRoutes = require('./routes/upload');
+let imagenesRoutes = require('./routes/imagenes');
 
 // Conexión a la base de datos
 mongoose.connection.openUri('mongodb://localhost:27017/hospitalDB', // Path de la base de datos
@@ -31,8 +36,20 @@ mongoose.connection.openUri('mongodb://localhost:27017/hospitalDB', // Path de l
     }
 )
 
+// Server index config
+// Esto es para ver la imagen desde unapagina web 
+// Para instalar ponemos npm install serve-index --save
+// let serveIndex = require('serve-index');
+// app.use(express.static(__dirname + '/'))
+// app.use('/uploads', serveIndex(__dirname + '/uploads'));
+
 // Rutas
+app.use('/hospital', hospitalRoutes);
+app.use('/medico', medicoRoutes);
+app.use('/busqueda', busquedaRoutes);
 app.use('/usuario', usuarioRoutes);
+app.use('/upload', uploadRoutes);
+app.use('/img', imagenesRoutes);
 app.use('/login', loginRoutes);
 app.use('/', appRoutes);
 // app.get('/', (req, res, next) => {
