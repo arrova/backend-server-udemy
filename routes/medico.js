@@ -13,7 +13,7 @@ let Medico = require('../models/medico');
 
 // Rutas
 // ========================================
-// Obtener todos los hospitales
+// Obtener todos los Medicos
 // ========================================
 app.get('/', (req, res) => {
 
@@ -33,7 +33,7 @@ app.get('/', (req, res) => {
                 });
             }
 
-            Medico.count({}, (err, conteo) => {
+            Medico.countDocuments({}, (err, conteo) => {
                 res.status(200).json({
                     ok: true,
                     medicos,
@@ -45,7 +45,39 @@ app.get('/', (req, res) => {
 });
 
 // ========================================
-// Crear un nuevo hospital
+// Obtener Medico por ID
+// ========================================
+app.get('/:id', (req, res) => {
+    const id = req.params.id;
+
+    Medico.findById(id)
+        .populate('usuario', 'nombre correo img')
+        .populate('hospital')
+        .exec((err, medico) => {
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    mensaje: 'Error al buscar el medico',
+                    errors: err
+                });
+            }
+            if (!medico) {
+                return res.status(400).json({
+                    ok: false,
+                    mensaje: 'El medico con el id ' + id + ' no existe',
+                    errors: { message: 'No existe un medico con el ID' }
+                });
+            }
+
+            res.status(200).json({
+                ok: true,
+                medico
+            });
+        });
+});
+
+// ========================================
+// Crear un nuevo Medico
 // ========================================
 app.post('/', mdAuth.verificaToken, (req, res) => { // Pasar validaciones por arreglo si +1
     let body = req.body;
@@ -72,7 +104,7 @@ app.post('/', mdAuth.verificaToken, (req, res) => { // Pasar validaciones por ar
 });
 
 // ========================================
-// Actualizar hospital
+// Actualizar Medico
 // ========================================
 app.put('/:id', mdAuth.verificaToken, (req, res) => { //mdAuth.verificaToken
     let id = req.params.id;
@@ -115,7 +147,7 @@ app.put('/:id', mdAuth.verificaToken, (req, res) => { //mdAuth.verificaToken
 });
 
 // ========================================
-// Borrar un hospital por el id
+// Borrar un Medico por el id
 // ========================================
 app.delete('/:id', mdAuth.verificaToken, (req, res) => { // , mdAuth.verificaToken
     var id = req.params.id;

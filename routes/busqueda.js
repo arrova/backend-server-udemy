@@ -39,7 +39,7 @@ app.get('/todo/:busqeuda', (req, res, next) => {
 // ========================================
 app.get('/coleccion/:tabla/:busqueda', (req, res) => {
     let tabla = req.params.tabla;
-    let busqueda = req.params.busqeuda;
+    let busqueda = req.params.busqueda;
     let regex = new RegExp(busqueda, 'i');
 
     let promesa;
@@ -100,7 +100,7 @@ function buscarMedicos(busqeuda, regex) {
 
 function buscarUsuarios(busqeuda, regex) {
     return new Promise((resolve, reject) => {
-        Usuario.find({}, 'nombr correo role')
+        Usuario.find({}, 'nombre correo role img')
             .or([{ nombre: regex }, { correo: regex }])
             .exec((err, usuarios) => {
                 if (err) {
